@@ -8,6 +8,12 @@ public class PersonalInfo {
     private String lastName;
 
     private final Date dob;
+    private String address;
+    private String country;
+    private String phoneNumber;
+    private String username;
+    private String password;
+    private int age;
 
     private int ssn;
 
