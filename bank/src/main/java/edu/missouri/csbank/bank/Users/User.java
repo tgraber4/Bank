@@ -13,7 +13,8 @@ public class User {
 
     private Personalization personalization;
 
-    private Date UserAge;
+    private Rewards userRewards;
+    private Date userAge;
     // date.getTime() -> converts in long form
 
     private final UUID uuid;
