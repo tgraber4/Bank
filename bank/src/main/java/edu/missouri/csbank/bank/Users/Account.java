@@ -5,7 +5,7 @@ public class Account {
 
     private final AccountType accountType;
     private String card;
-    private AccountInfo accountInfo;
+    private final AccountInfo accountInfo;
     public Account(AccountType accountType, String card, AccountInfo accountInfo) {
         this.accountType = accountType;
         this.card = card;
@@ -28,7 +28,4 @@ public class Account {
         return accountInfo;
     }
 
-    public void setAccountInfo(AccountInfo accountInfo) {
-        this.accountInfo = accountInfo;
-    }
 }

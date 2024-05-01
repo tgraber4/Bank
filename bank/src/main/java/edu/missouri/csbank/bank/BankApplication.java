@@ -20,5 +20,6 @@ public class BankApplication {
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 		return String.format("Hello %s!", name);
+		// 127.0.0.1:8080/hello?name=BObby%20SMith
 	}
 }
