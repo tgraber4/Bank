@@ -9,10 +9,10 @@ public class AccountInfo {
     private double APR; // 0.##
     private double cashbackRate; // 0.##
     private int securityLevel;
-    private Date accountAge;
+    private final Date accountAge; // stored as a date
     private List<String> linkedAccounts;
 
-    public AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
         this.balance = balance;
         this.accountLimit = accountLimit;
         this.APR = APR;
@@ -20,6 +20,22 @@ public class AccountInfo {
         this.securityLevel = securityLevel;
         this.accountAge = accountAge;
         this.linkedAccounts = linkedAccounts;
+    }
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, List<String> linkedAccounts) {
+        this.balance = balance;
+        this.accountLimit = accountLimit;
+        this.APR = APR;
+        this.cashbackRate = cashbackRate;
+        this.securityLevel = securityLevel;
+        this.accountAge = new Date();
+        this.linkedAccounts = linkedAccounts;
+    }
+
+    public static AccountInfo newAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, List<String> linkedAccounts) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, linkedAccounts);
+    }
+    public static AccountInfo existingAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, accountAge, linkedAccounts);
     }
 
     public double getBalance() {
@@ -62,12 +78,9 @@ public class AccountInfo {
         this.securityLevel = securityLevel;
     }
 
-    public Date getAccountAge() {
-        return accountAge;
-    }
-
-    public void setAccountAge(Date accountAge) {
-        this.accountAge = accountAge;
+    public int getAccountAgeInYears() {
+        long age = (System.currentTimeMillis() - accountAge.getTime()) / (60L * 60 * 24 * 365 * 1000);
+        return (int) age;
     }
 
     public List<String> getLinkedAccounts() {

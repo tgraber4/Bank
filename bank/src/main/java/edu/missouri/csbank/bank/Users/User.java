@@ -6,17 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class User {
-    private final PersonalInfo info;
 
-    private final List<Account> accountList = new ArrayList<>();
-
-    private final List<String> linkedBanks = new ArrayList<>();
-
-    private final Personalization personalization;
-
-    private final Rewards userRewards;
-    private final Date userAccountAge;
-    // date.getTime() -> converts in long form
+    private String username, password;
+    private final UserWrapper wrapper;
 
     private final UUID uuid;
 
@@ -25,53 +17,26 @@ public class User {
 
 
     // make an old user
-    private User(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge, UUID uuid) {
-        this.info = info;
-        this.personalization = personalization;
-        this.userRewards = userRewards;
-        this.userAccountAge = userAccountAge;
+    private User(UUID uuid, UserWrapper wrapper) {
         this.uuid = uuid;
+        this.wrapper = wrapper;
     }
 
     // makes a new user
-    private User(PersonalInfo info, Personalization personalization, Rewards userRewards) {
-        this.info = info;
-        this.personalization = personalization;
-        this.userRewards = userRewards;
-        this.userAccountAge = new Date();
+    private User(UserWrapper wrapper) {
         this.uuid = UUID.randomUUID();
+        this.wrapper = wrapper;
     }
 
-    public static User newUser(PersonalInfo info, Personalization personalization, Rewards userRewards) {
-        return new User(info, personalization, userRewards);
+    public static User newUser(UserWrapper wrapper) {
+        return new User(wrapper);
     }
-    public static User existingUser(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge, UUID uuid) {
-        return new User(info, personalization, userRewards, userAccountAge, uuid);
-    }
-
-
-    public PersonalInfo getInfo() {
-        return info;
+    public static User existingUser(UUID uuid, UserWrapper wrapper) {
+        return new User(uuid, wrapper);
     }
 
-    public List<Account> getAccountList() {
-        return accountList;
-    }
-
-    public List<String> getLinkedBanks() {
-        return linkedBanks;
-    }
-
-    public Personalization getPersonalization() {
-        return personalization;
-    }
-
-    public Rewards getUserRewards() {
-        return userRewards;
-    }
-
-    public Date getUserAccountAge() {
-        return userAccountAge;
+    public UserWrapper getWrapper() {
+        return wrapper;
     }
 
     public UUID getUUID() {

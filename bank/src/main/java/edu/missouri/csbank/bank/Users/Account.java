@@ -2,7 +2,6 @@ package edu.missouri.csbank.bank.Users;
 
 public class Account {
 
-
     private final AccountType accountType;
     private String card;
     private final AccountInfo accountInfo;

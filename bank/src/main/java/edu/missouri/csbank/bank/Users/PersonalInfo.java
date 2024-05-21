@@ -7,19 +7,14 @@ public class PersonalInfo {
     private String firstName;
     private String middleName;
     private String lastName;
-
     private final Date dob;
     private String address;
     private String country;
     private String phoneNumber;
     private String email;
-    private String username;
-    private String password;
-    private int age; // don't include in constructor
-
     private int ssn;
 
-    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String username, String password, int ssn) {
+    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, int ssn) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -27,15 +22,10 @@ public class PersonalInfo {
         this.address = address;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.password = password;
+        this.email = email;
         this.ssn = ssn;
     }
 
-    private void updateAge() {
-        long age = (System.currentTimeMillis() - dob.getTime()) / (60L * 60 * 24 * 365 * 1000);
-        this.age = (int) age;
-    }
     public String getAddress() {
         return address;
     }
@@ -60,31 +50,18 @@ public class PersonalInfo {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public int getAgeInYears() {
+        long age = (System.currentTimeMillis() - dob.getTime()) / (60L * 60 * 24 * 365 * 1000);
+        return (int) age;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getAge() {
-        updateAge();
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
 
     public String getFirstName() {
         return firstName;
