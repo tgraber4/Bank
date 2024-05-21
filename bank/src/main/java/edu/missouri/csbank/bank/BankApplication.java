@@ -32,6 +32,7 @@ public class BankApplication {
 		AccountInfo testAccountInfo1 = new AccountInfo(150.45, 10000, 0.01, 0.005, 1, new Date(), linkedAccounts);
 		Account bobSavings1 = new Account(AccountType.SAVINGS, "1257575744", testAccountInfo1);
 
+		//
 		// finish users
 		// should we do new Date for accountInfo or make two version like what we did in User
 		// get user age --> finish this
