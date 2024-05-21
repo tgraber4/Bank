@@ -12,6 +12,7 @@ public class PersonalInfo {
     private String address;
     private String country;
     private String phoneNumber;
+    private String email;
     private String username;
     private String password;
     private int age; // don't include in constructor

@@ -8,6 +8,8 @@ import java.util.UUID;
 public class Bank {
     private final Map<UUID, User> userMap = new HashMap<>();
 
+    private String name;
+
     private static Bank instance = null;
     private Bank() {
 
@@ -18,6 +20,15 @@ public class Bank {
         }
         return instance;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void addUser(User user) {
         userMap.put(UUID.randomUUID(), user);
     }

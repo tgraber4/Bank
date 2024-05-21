@@ -4,15 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 public class AccountInfo {
-    private int balance;
+    private double balance;
     private int accountLimit;
-    private double APR;
-    private double cashbackRate;
+    private double APR; // 0.##
+    private double cashbackRate; // 0.##
     private int securityLevel;
     private Date accountAge;
     private List<String> linkedAccounts;
 
-    public AccountInfo(int balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+    public AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
         this.balance = balance;
         this.accountLimit = accountLimit;
         this.APR = APR;
@@ -22,7 +22,7 @@ public class AccountInfo {
         this.linkedAccounts = linkedAccounts;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
