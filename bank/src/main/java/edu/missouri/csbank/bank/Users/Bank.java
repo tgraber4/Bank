@@ -30,7 +30,7 @@ public class Bank {
     }
 
     public void addUser(User user) {
-        userMap.put(UUID.randomUUID(), user);
+        userMap.put(user.getUUID(), user);
     }
     public User getUser(UUID id) {
         return userMap.get(id);
