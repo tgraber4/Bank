@@ -10,8 +10,9 @@ public class PersonalInfo {
     private final Date dob;
     private String address;
     private String country;
-    private String phoneNumber;
-    private String email;
+    private String phoneNumber; // TODO: make this into home, mobile, extra phone numbers
+    private String email; // TODO: allow multiple email and a primary one
+    private String language;
     private int ssn;
 
     public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, int ssn) {

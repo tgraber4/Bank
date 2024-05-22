@@ -42,4 +42,18 @@ public class User {
     public UUID getUUID() {
         return uuid;
     }
+
+    public void addAccount (Account account) {
+        this.wrapper.addAccount(account);
+    }
+    public void addLinkedBank (String linkedBank) {
+        this.wrapper.addLinkedBank(linkedBank);
+    }
+
+    public boolean removeAccount (Account account) {
+        return this.wrapper.removeAccount(account);
+    }
+    public boolean removeLinkedBank (String linkedBank) {
+        return this.wrapper.removeLinkedBank(linkedBank);
+    }
 }

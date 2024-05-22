@@ -21,6 +21,8 @@ public class UserWrapper {
         this.personalization = personalization;
         this.userRewards = userRewards;
         this.userAccountAge = userAccountAge;
+        // List<Account> accountList
+        // this.accountList = accountList; <-- doesn't work because it's final
     }
 
     private UserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards) {
@@ -61,5 +63,20 @@ public class UserWrapper {
 
     public PersonalInfo getInfo() {
         return info;
+    }
+
+    public void addAccount (Account account) {
+        this.accountList.add(account);
+    }
+
+    public void addLinkedBank (String linkedBank) {
+        this.linkedBanks.add(linkedBank);
+    }
+
+    public boolean removeAccount (Account account) {
+        return this.accountList.remove(account);
+    }
+    public boolean removeLinkedBank (String linkedBank) {
+        return this.linkedBanks.remove(linkedBank);
     }
 }

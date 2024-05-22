@@ -26,21 +26,42 @@ public class BankApplication {
 		Personalization test2 = new Personalization(NotificationLevel.NONE);
 		List<String> deals = new ArrayList<>();
 		deals.add("COOL STUFF!");
-		Rewards test3 = new Rewards(150.45, 0.12, "1/12/24: $50 - Oranges", deals);
+		Rewards test3 = new Rewards(150.45, 0.12, deals);
 		Bank capitalOne = Bank.getInstance();
 		UserWrapper bobWrapper = UserWrapper.newUserWrapper(test, test2, test3);
 		User bob = User.newUser(bobWrapper);
 		capitalOne.setName("CapitalOne");
 		capitalOne.addUser(bob);
-		List<String> linkedAccounts = new ArrayList<>();
-		AccountInfo testAccountInfo1 = AccountInfo.newAccountInfo(150.45, 10000, 0.01, 0.005, 1, linkedAccounts);
+		AccountInfo testAccountInfo1 = AccountInfo.newAccountInfo(150.45, 10000, 0.01, 0.005, 1);
+		testAccountInfo1.addLinkedAccount("PNC-Illinois-Checking");
 		Account bobSavings1 = new Account(AccountType.SAVINGS, "1257575744", testAccountInfo1);
+		bob.getWrapper().addAccount(bobSavings1);
+		System.out.println(bob.getWrapper().getAccountList());
+		// Ask Alex about lists (TODO)
+
+		// do rewards (TODO)
+		// Go over Base 64 - Java  (https://www.baeldung.com/java-base64-encode-and-decode)
+		/*
+		Need to decide if Rewards Deals should be stored in the website or users.
+		Deals should be one of these ways:
+		- each user has their own custom deals
+		- deals are dependent on user account age
+		- deals are the same for everyone
+
+		 */
 
 
-		// go over all the ages and think of a good system
-		// personal info - finish
-		// go over SQL
-		// Go over Base 64 - Java
+		/*
+		(!) (!) (!) ---------- Comments for Alex ---------- (!) (!) (!)
+
+		- Since User has the UserWrapper should everything be done through the UserWrapper class or
+		should I still give functionality to User
+		Ex: addAccount() in User
+
+		- is how I did the Lists in AccountInfo and UserWrapper good?
+		Note for this: should the loading existing functions take these lists in from the databases or
+		use the set functions instead?
+		*/
 
 	}
 	@GetMapping("/hello")
@@ -49,7 +70,7 @@ public class BankApplication {
 		Personalization test2 = new Personalization(NotificationLevel.NONE);
 		List<String> deals = new ArrayList<>();
 		deals.add("COOL STUFF!");
-		Rewards test3 = new Rewards(150.45, 0.12, "1/12/24: $50 - Oranges", deals);
+		Rewards test3 = new Rewards(150.45, 0.12, deals);
 		Bank capitalOne = Bank.getInstance();
 		UserWrapper bobWrapper = UserWrapper.newUserWrapper(test, test2, test3);
 		User bob = User.newUser(bobWrapper);

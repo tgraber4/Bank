@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 public class AccountInfo {
+
+    private int accountNumber; // TODO: finish this
+    private int routingNumber; // TODO: finish this
     private double balance;
     private int accountLimit;
     private double APR; // 0.##
@@ -12,30 +15,28 @@ public class AccountInfo {
     private final Date accountAge; // stored as a date
     private List<String> linkedAccounts;
 
-    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge) {
         this.balance = balance;
         this.accountLimit = accountLimit;
         this.APR = APR;
         this.cashbackRate = cashbackRate;
         this.securityLevel = securityLevel;
         this.accountAge = accountAge;
-        this.linkedAccounts = linkedAccounts;
     }
-    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, List<String> linkedAccounts) {
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel) {
         this.balance = balance;
         this.accountLimit = accountLimit;
         this.APR = APR;
         this.cashbackRate = cashbackRate;
         this.securityLevel = securityLevel;
         this.accountAge = new Date();
-        this.linkedAccounts = linkedAccounts;
     }
 
-    public static AccountInfo newAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, List<String> linkedAccounts) {
-        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, linkedAccounts);
+    public static AccountInfo newAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel);
     }
-    public static AccountInfo existingAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
-        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, accountAge, linkedAccounts);
+    public static AccountInfo existingAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, accountAge);
     }
 
     public double getBalance() {
@@ -89,5 +90,12 @@ public class AccountInfo {
 
     public void setLinkedAccounts(List<String> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
+    }
+
+    public void addLinkedAccount (String linkedAccount) {
+        this.linkedAccounts.add(linkedAccount);
+    }
+    public boolean removeLinkedAccount (String linkedAccount) {
+        return this.linkedAccounts.remove(linkedAccount);
     }
 }
