@@ -8,6 +8,15 @@ import java.util.UUID;
 public class Bank {
     private final Map<UUID, User> userMap = new HashMap<>();
 
+    // TODO: Add transactions
+    // TODO: Add loans
+    // TODO: Add Scheduled Payments
+    /*  - Scheduled paying off credit account
+        - Automatic payments to something each month
+        - ? (auto deposits maybe too) ?
+     */
+    // TODO: Monitor credit accounts
+
     private String name;
 
     private static Bank instance = null;

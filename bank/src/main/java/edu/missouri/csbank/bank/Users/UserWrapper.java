@@ -6,9 +6,9 @@ import java.util.List;
 
 public class UserWrapper {
     private final PersonalInfo info;
-    private final List<Account> accountList = new ArrayList<>();
+    private final List<Account> accountList;
 
-    private final List<String> linkedBanks = new ArrayList<>();
+    private final List<String> linkedBanks;
 
     private final Personalization personalization;
 
@@ -16,13 +16,13 @@ public class UserWrapper {
     private final Date userAccountAge; // stored as a date
 
 
-    private UserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge) {
+    private UserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge, List<Account> accountList, List<String> linkedBanks) {
         this.info = info;
         this.personalization = personalization;
         this.userRewards = userRewards;
         this.userAccountAge = userAccountAge;
-        // List<Account> accountList
-        // this.accountList = accountList; <-- doesn't work because it's final
+        this.accountList = accountList;
+        this.linkedBanks = linkedBanks;
     }
 
     private UserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards) {
@@ -30,13 +30,15 @@ public class UserWrapper {
         this.personalization = personalization;
         this.userRewards = userRewards;
         this.userAccountAge = new Date();
+        this.accountList = new ArrayList<>();
+        this.linkedBanks = new ArrayList<>();
     }
     public static UserWrapper newUserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards) {
         return new UserWrapper(info, personalization, userRewards);
     }
 
-    public static UserWrapper existingUserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge) {
-        return new UserWrapper(info, personalization, userRewards, userAccountAge);
+    public static UserWrapper existingUserWrapper(PersonalInfo info, Personalization personalization, Rewards userRewards, Date userAccountAge, List<Account> accountList, List<String> linkedBanks) {
+        return new UserWrapper(info, personalization, userRewards, userAccountAge, accountList, linkedBanks);
     }
 
 

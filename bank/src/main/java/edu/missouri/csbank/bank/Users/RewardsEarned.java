@@ -3,18 +3,20 @@ package edu.missouri.csbank.bank.Users;
 import java.util.Date;
 
 public class RewardsEarned {
-    // Earned Layout    --->    Date | Description | Amount | Type | Rewards Earned
+    // Earned Layout    --->    Date | Description | Amount | Account | Type | Rewards Earned
 
     private Date date;
     private String description;
     private double amountSpent;
+    private String account;
     private String type; // replace with enum (TODO)
     private double rewardsAmountEarned;
 
-    public RewardsEarned(Date date, String description, double amountSpent, String type, double rewardsAmountEarned) {
+    public RewardsEarned(Date date, String description, double amountSpent, String account, String type, double rewardsAmountEarned) {
         this.date = date;
         this.description = description;
         this.amountSpent = amountSpent;
+        this.account = account;
         this.type = type;
         this.rewardsAmountEarned = rewardsAmountEarned;
     }
@@ -41,6 +43,14 @@ public class RewardsEarned {
 
     public void setAmountSpent(double amountSpent) {
         this.amountSpent = amountSpent;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getType() {

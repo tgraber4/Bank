@@ -15,7 +15,7 @@ public class PersonalInfo {
     private String language;
     private int ssn;
 
-    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, int ssn) {
+    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, String language, int ssn) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -24,6 +24,7 @@ public class PersonalInfo {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.language = language;
         this.ssn = ssn;
     }
 
@@ -57,6 +58,14 @@ public class PersonalInfo {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public int getAgeInYears() {
