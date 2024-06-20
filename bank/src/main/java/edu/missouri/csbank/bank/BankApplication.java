@@ -1,12 +1,16 @@
 package edu.missouri.csbank.bank;
 
 import edu.missouri.csbank.bank.Users.*;
+import edu.missouri.csbank.bank.sql.DBPasswordManager;
+import edu.missouri.csbank.bank.sql.SQLConnectionManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +24,18 @@ public class BankApplication {
  */
 	public static void main(String[] args) {
 		SpringApplication.run(BankApplication.class, args);
+		DBPasswordManager manager = new DBPasswordManager();
+		SQLConnectionManager connectionManager = new SQLConnectionManager(manager.getPassword());
+
+		String query = "SELECT * FROM db WHERE name = ?";
+		try {
+			PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// change the bank in connURL to postgres
+		// sql must be executed in main
+		// check discord for files for it
 
 		// Adding 1 User
 		PersonalInfo test = new PersonalInfo("Bob", "no", "bob", new Date(100, 3, 20), "street", "U.S.", "217-999-9999", "bob@gmail.com", "English", 100023);
@@ -51,7 +67,7 @@ public class BankApplication {
 		}
 
 		// go over how to do accounts - different account types need different info
-		// Go over Base 64 - Java  (https://www.baeldung.com/java-base64-encode-and-decode)
+		// talk about Base 64 - Java  (https://www.baeldung.com/java-base64-encode-and-decode)
 		/*
 		Need to decide if Rewards Deals should be stored in the website or users.
 		Deals should be one of these ways:
