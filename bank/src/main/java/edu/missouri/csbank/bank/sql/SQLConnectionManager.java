@@ -6,7 +6,7 @@ public class SQLConnectionManager {
 
     //TODO: Consider making this configurable
     private final String user = "postgres";
-    private final String connURL = "jdbc:postgresql://localhost:5432/bank";
+    private final String connURL = "jdbc:postgresql://localhost:5432/postgres";
 
     private final Connection connection;
 

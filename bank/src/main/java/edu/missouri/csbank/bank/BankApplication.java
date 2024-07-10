@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,15 +28,39 @@ public class BankApplication {
 		DBPasswordManager manager = new DBPasswordManager();
 		SQLConnectionManager connectionManager = new SQLConnectionManager(manager.getPassword());
 
-		String query = "SELECT * FROM db WHERE name = ?";
+		String query = "CREATE TABLE IF NOT EXISTS cars (\n" +
+				"  brand VARCHAR(255),\n" +
+				"  model VARCHAR(255),\n" +
+				"  year INT\n" +
+				");";
 		try {
 			PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
+			// statement.setString(1, "tyler");
+
+			int result = statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// change the bank in connURL to postgres
+
+		query = "INSERT INTO cars (brand, model, year)\n" +
+				"VALUES ('Ford', 'Mustang', 1964);";
+		try {
+			PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
+			int result = statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		query = "SELECT brand FROM cars;";
+		try {
+			PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				System.out.println(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		// sql must be executed in main
-		// check discord for files for it
 
 		// Adding 1 User
 		PersonalInfo test = new PersonalInfo("Bob", "no", "bob", new Date(100, 3, 20), "street", "U.S.", "217-999-9999", "bob@gmail.com", "English", 100023);
