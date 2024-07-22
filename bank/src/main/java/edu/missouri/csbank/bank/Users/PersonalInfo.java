@@ -1,9 +1,14 @@
 package edu.missouri.csbank.bank.Users;
 
-import java.util.Calendar;
-import java.util.Date;
+import edu.missouri.csbank.bank.sql.SQLConnectionManager;
+import edu.missouri.csbank.bank.types.TypeHolder;
 
-public class PersonalInfo {
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+
+public class PersonalInfo implements SQLObject{
+    //TODO: Add unique id so that this can be updated in SQL table
     private String firstName;
     private String middleName;
     private String lastName;
@@ -27,7 +32,26 @@ public class PersonalInfo {
         this.language = language;
         this.ssn = ssn;
     }
-
+    public List<String> getTypeList () {
+        return new ArrayList<String>(Arrays.asList("String", "String", "String", "Date", "String", "String", "String", "String", "String", "Int"));
+    }
+    public List<String> getTypeNameList () {
+        return new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
+    }
+    public List<TypeHolder> getTypeHolderList () {
+        List<TypeHolder> tempList = new ArrayList<TypeHolder>();
+        tempList.add(new TypeHolder(this.firstName));
+        tempList.add(new TypeHolder(this.middleName));
+        tempList.add(new TypeHolder(this.lastName));
+        tempList.add(new TypeHolder(this.dob));
+        tempList.add(new TypeHolder(this.address));
+        tempList.add(new TypeHolder(this.country));
+        tempList.add(new TypeHolder(this.phoneNumber));
+        tempList.add(new TypeHolder(this.email));
+        tempList.add(new TypeHolder(this.language));
+        tempList.add(new TypeHolder(this.ssn));
+        return tempList;
+    }
     public String getAddress() {
         return address;
     }
@@ -107,5 +131,23 @@ public class PersonalInfo {
 
     public void setSSN(int ssn) {
         this.ssn = ssn;
+    }
+
+    @Override
+    public void update(SQLConnectionManager connectionManager) {
+        String query = "UPDATE " + "PersonalInfo" + "\n";
+        query = query.concat("SET " + this.getTypeNameList().get(0) + " = " + "'" + this.getFirstName() + "';");
+        System.out.println(query);
+        try {
+            PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
+            int result = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void load() {
+
     }
 }
