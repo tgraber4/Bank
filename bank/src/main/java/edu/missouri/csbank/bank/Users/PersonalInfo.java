@@ -1,10 +1,5 @@
 package edu.missouri.csbank.bank.Users;
 
-import edu.missouri.csbank.bank.sql.SQLConnectionManager;
-import edu.missouri.csbank.bank.types.TypeHolder;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 public class PersonalInfo implements SQLObject{
@@ -20,6 +15,9 @@ public class PersonalInfo implements SQLObject{
     private String language;
     private int ssn;
 
+    public PersonalInfo() {
+        this.dob = new Date();
+    }
     public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, String language, int ssn) {
         this.firstName = firstName;
         this.middleName = middleName;
@@ -32,26 +30,8 @@ public class PersonalInfo implements SQLObject{
         this.language = language;
         this.ssn = ssn;
     }
-    public List<String> getTypeList () {
-        return new ArrayList<String>(Arrays.asList("String", "String", "String", "Date", "String", "String", "String", "String", "String", "Int"));
-    }
-    public List<String> getTypeNameList () {
-        return new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
-    }
-    public List<TypeHolder> getTypeHolderList () {
-        List<TypeHolder> tempList = new ArrayList<TypeHolder>();
-        tempList.add(new TypeHolder(this.firstName));
-        tempList.add(new TypeHolder(this.middleName));
-        tempList.add(new TypeHolder(this.lastName));
-        tempList.add(new TypeHolder(this.dob));
-        tempList.add(new TypeHolder(this.address));
-        tempList.add(new TypeHolder(this.country));
-        tempList.add(new TypeHolder(this.phoneNumber));
-        tempList.add(new TypeHolder(this.email));
-        tempList.add(new TypeHolder(this.language));
-        tempList.add(new TypeHolder(this.ssn));
-        return tempList;
-    }
+
+
     public String getAddress() {
         return address;
     }
@@ -134,20 +114,34 @@ public class PersonalInfo implements SQLObject{
     }
 
     @Override
-    public void update(SQLConnectionManager connectionManager) {
-        String query = "UPDATE " + "PersonalInfo" + "\n";
-        query = query.concat("SET " + this.getTypeNameList().get(0) + " = " + "'" + this.getFirstName() + "';");
-        System.out.println(query);
-        try {
-            PreparedStatement statement = connectionManager.getConnection().prepareStatement(query);
-            int result = statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public Tables getTable() {
+        return Tables.PERSONAL_INFO;
     }
 
     @Override
-    public void load() {
+    public void update() {
+        //update stuff
+    }
 
+    @Override
+    public String createString () {
+        ArrayList<String> TypeList = new ArrayList<String>(Arrays.asList("String", "String", "String", "Date", "String", "String", "String", "String", "String", "Int"));
+        List<String> TypeNameList = new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
+        return createTableString(TypeList, TypeNameList);
+    }
+    @Override
+    public String valuesString() {
+        String valueString = "";
+        valueString += "'" + firstName + "',";
+        valueString += "'" + middleName + "',";
+        valueString += "'" + lastName + "',";
+        valueString += dateToInt(dob) + ",";
+        valueString += "'" + address + "',";
+        valueString += "'" + country + "',";
+        valueString += "'" + phoneNumber + "',";
+        valueString += "'" + email + "',";
+        valueString += "'" + language + "',";
+        valueString += "" + ssn;
+        return valueString;
     }
 }

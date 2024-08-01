@@ -2,7 +2,7 @@ package edu.missouri.csbank.bank.Users;
 
 import edu.missouri.csbank.bank.sql.SQLConnectionManager;
 
-public class Account implements SQLObject {
+public class Account {
 
     private final AccountType accountType;
     private String card;
@@ -29,13 +29,5 @@ public class Account implements SQLObject {
         return accountInfo;
     }
 
-    @Override
-    public void update(SQLConnectionManager connectionManager) {
 
-    }
-
-    @Override
-    public void load() {
-
-    }
 }
