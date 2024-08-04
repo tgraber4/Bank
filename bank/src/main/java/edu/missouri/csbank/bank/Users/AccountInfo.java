@@ -1,18 +1,22 @@
 package edu.missouri.csbank.bank.Users;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class AccountInfo {
+
+    private int accountNumber; // TODO: finish this
+    private int routingNumber; // TODO: finish this
     private double balance;
     private int accountLimit;
     private double APR; // 0.##
     private double cashbackRate; // 0.##
-    private int securityLevel;
-    private Date accountAge;
-    private List<String> linkedAccounts;
+    private int securityLevel; // determines where, how often, and how big of amounts you can use the account for
+    private final Date accountAge; // stored as a date
+    private final List<String> linkedAccounts;
 
-    public AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
         this.balance = balance;
         this.accountLimit = accountLimit;
         this.APR = APR;
@@ -20,6 +24,22 @@ public class AccountInfo {
         this.securityLevel = securityLevel;
         this.accountAge = accountAge;
         this.linkedAccounts = linkedAccounts;
+    }
+    private AccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel) {
+        this.balance = balance;
+        this.accountLimit = accountLimit;
+        this.APR = APR;
+        this.cashbackRate = cashbackRate;
+        this.securityLevel = securityLevel;
+        this.accountAge = new Date();
+        this.linkedAccounts = new ArrayList<>();
+    }
+
+    public static AccountInfo newAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel);
+    }
+    public static AccountInfo existingAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, Date accountAge, List<String> linkedAccounts) {
+        return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, accountAge, linkedAccounts);
     }
 
     public double getBalance() {
@@ -62,19 +82,19 @@ public class AccountInfo {
         this.securityLevel = securityLevel;
     }
 
-    public Date getAccountAge() {
-        return accountAge;
-    }
-
-    public void setAccountAge(Date accountAge) {
-        this.accountAge = accountAge;
+    public int getAccountAgeInYears() {
+        long age = (System.currentTimeMillis() - accountAge.getTime()) / (60L * 60 * 24 * 365 * 1000);
+        return (int) age;
     }
 
     public List<String> getLinkedAccounts() {
         return linkedAccounts;
     }
 
-    public void setLinkedAccounts(List<String> linkedAccounts) {
-        this.linkedAccounts = linkedAccounts;
+    public void addLinkedAccount (String linkedAccount) {
+        this.linkedAccounts.add(linkedAccount);
+    }
+    public boolean removeLinkedAccount (String linkedAccount) {
+        return this.linkedAccounts.remove(linkedAccount);
     }
 }

@@ -1,7 +1,8 @@
 package edu.missouri.csbank.bank.Users;
 
-public class Account {
+import edu.missouri.csbank.bank.sql.SQLConnectionManager;
 
+public class Account {
 
     private final AccountType accountType;
     private String card;
@@ -27,5 +28,6 @@ public class Account {
     public AccountInfo getAccountInfo() {
         return accountInfo;
     }
+
 
 }

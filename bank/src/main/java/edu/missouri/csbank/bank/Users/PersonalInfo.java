@@ -1,25 +1,24 @@
 package edu.missouri.csbank.bank.Users;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
-public class PersonalInfo {
+public class PersonalInfo implements SQLObject{
+    //TODO: Add unique id so that this can be updated in SQL table
     private String firstName;
     private String middleName;
     private String lastName;
-
     private final Date dob;
     private String address;
     private String country;
-    private String phoneNumber;
-    private String email;
-    private String username;
-    private String password;
-    private int age; // don't include in constructor
-
+    private String phoneNumber; // TODO: make this into home, mobile, extra phone numbers
+    private String email; // TODO: allow multiple email and a primary one
+    private String language;
     private int ssn;
 
-    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String username, String password, int ssn) {
+    public PersonalInfo() {
+        this.dob = new Date();
+    }
+    public PersonalInfo(String firstName, String middleName, String lastName, Date dob, String address, String country, String phoneNumber, String email, String language, int ssn) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -27,15 +26,12 @@ public class PersonalInfo {
         this.address = address;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.password = password;
+        this.email = email;
+        this.language = language;
         this.ssn = ssn;
     }
 
-    private void updateAge() {
-        long age = (System.currentTimeMillis() - dob.getTime()) / (60L * 60 * 24 * 365 * 1000);
-        this.age = (int) age;
-    }
+
     public String getAddress() {
         return address;
     }
@@ -60,31 +56,26 @@ public class PersonalInfo {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
-    public int getAge() {
-        updateAge();
-        return age;
+    public int getAgeInYears() {
+        long age = (System.currentTimeMillis() - dob.getTime()) / (60L * 60 * 24 * 365 * 1000);
+        return (int) age;
     }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
 
     public String getFirstName() {
         return firstName;
@@ -120,5 +111,37 @@ public class PersonalInfo {
 
     public void setSSN(int ssn) {
         this.ssn = ssn;
+    }
+
+    @Override
+    public Tables getTable() {
+        return Tables.PERSONAL_INFO;
+    }
+
+    @Override
+    public void update() {
+        //update stuff
+    }
+
+    @Override
+    public String createString () {
+        ArrayList<String> TypeList = new ArrayList<String>(Arrays.asList("String", "String", "String", "Date", "String", "String", "String", "String", "String", "Int"));
+        List<String> TypeNameList = new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
+        return createTableString(TypeList, TypeNameList);
+    }
+    @Override
+    public String valuesString() {
+        String valueString = "";
+        valueString += "'" + firstName + "',";
+        valueString += "'" + middleName + "',";
+        valueString += "'" + lastName + "',";
+        valueString += dateToInt(dob) + ",";
+        valueString += "'" + address + "',";
+        valueString += "'" + country + "',";
+        valueString += "'" + phoneNumber + "',";
+        valueString += "'" + email + "',";
+        valueString += "'" + language + "',";
+        valueString += "" + ssn;
+        return valueString;
     }
 }
