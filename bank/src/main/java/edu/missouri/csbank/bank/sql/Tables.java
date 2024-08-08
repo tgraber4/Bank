@@ -1,4 +1,4 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.sql;
 
 
 public enum Tables {

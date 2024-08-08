@@ -1,4 +1,4 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.account;
 
 public enum AccountType {
     SAVINGS, CHECKING, INVESTMENT, CREDIT;

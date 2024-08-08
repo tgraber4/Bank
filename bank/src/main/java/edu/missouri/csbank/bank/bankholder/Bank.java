@@ -1,21 +1,23 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.bankholder;
+
+import edu.missouri.csbank.bank.users.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class Bank {
     private final Map<UUID, User> userMap = new HashMap<>();
 
-    // TODO: Add transactions
-    // TODO: Add loans
-    // TODO: Add Scheduled Payments
-    /*  - Scheduled paying off credit account
-        - Automatic payments to something each month
-        - ? (auto deposits maybe too) ?
-     */
-    // TODO: Monitor credit accounts
+    /*
+    ---- Future Goals ----
+    - Add transactions
+    - Add loans
+    - Add Scheduled Payments
+           (-) Scheduled paying off credit account
+           (-) Automatic payments to something each month
+    - Monitor credit accounts
+    */
 
     private String name;
 

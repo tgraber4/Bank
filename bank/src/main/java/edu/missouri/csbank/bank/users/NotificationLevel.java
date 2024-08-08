@@ -1,4 +1,4 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.users;
 
 public enum NotificationLevel {
     NONE, SOME, ALL;
