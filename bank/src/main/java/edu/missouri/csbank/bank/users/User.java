@@ -1,8 +1,7 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.users;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import edu.missouri.csbank.bank.account.Account;
+
 import java.util.UUID;
 
 public class User {
@@ -16,7 +15,7 @@ public class User {
 
 
 
-    // make an old user
+
     private User(UUID uuid, UserWrapper wrapper) {
         this.uuid = uuid;
         this.wrapper = wrapper;

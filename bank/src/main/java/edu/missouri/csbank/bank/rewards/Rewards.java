@@ -1,16 +1,27 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.rewards;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Rewards {
+
+    /*
+    ----- Rewards Info -----
+
+    - Depends on what we decide for how the reward deals and rewards perks should be setup
+
+    - If we decide to have custom deals we'll keep the rewardsDeals list.
+        (-) Info for rewardsDeals:
+            - convert into class later Ex: https://www.doctorofcredit.com/wp-content/uploads/2023/06/Screenshot-2023-06-05-at-3.59.33-PM-1024x372.png
+            - title, amount/info, description
+
+
+     */
     private double rewardsBalance;
     private final List<RewardsEarned> rewardsEarnedHistory;
     private final List<RewardsSpent> rewardsSpentHistory;
-    private List<String> rewardsPerks; // might need to switch to rewards level where different levels give different perks
-
-    private List<String> rewardsDeals; // convert into class later Ex: https://www.doctorofcredit.com/wp-content/uploads/2023/06/Screenshot-2023-06-05-at-3.59.33-PM-1024x372.png
-    // title, amount, description
+    private List<String> rewardsPerks;
+    private List<String> rewardsDeals;
     private Rewards(double rewardsBalance, List<RewardsEarned> rewardsEarnedHistory, List<RewardsSpent> rewardsSpentHistory, List<String> rewardsDeals) {
         this.rewardsBalance = rewardsBalance;
         this.rewardsEarnedHistory = rewardsEarnedHistory;

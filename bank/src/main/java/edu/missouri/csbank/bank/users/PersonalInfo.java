@@ -1,9 +1,12 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.users;
+
+import edu.missouri.csbank.bank.sql.SQLCreateType;
+import edu.missouri.csbank.bank.sql.SQLObject;
+import edu.missouri.csbank.bank.sql.Tables;
 
 import java.util.*;
 
-public class PersonalInfo implements SQLObject{
-    //TODO: Add unique id so that this can be updated in SQL table
+public class PersonalInfo implements SQLObject {
     private String firstName;
     private String middleName;
     private String lastName;
@@ -114,20 +117,44 @@ public class PersonalInfo implements SQLObject{
     }
 
     @Override
+    public List<String> getTypeNameList() {
+        return new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
+    }
+    @Override
     public Tables getTable() {
         return Tables.PERSONAL_INFO;
     }
 
     @Override
-    public void update() {
-        //update stuff
+    public List<String> updateString() {
+        List<String> updateString = new ArrayList<String>();
+        updateString.add("'" + firstName + "'");
+        updateString.add("'" + middleName + "'");
+        updateString.add("'" + lastName + "'");
+        updateString.add("" + dateToInt(dob));
+        updateString.add("'" + address + "'");
+        updateString.add("'" + country + "'");
+        updateString.add("'" + phoneNumber + "'");
+        updateString.add("'" + email + "'");
+        updateString.add("'" + language + "'");
+        updateString.add("" + ssn);
+        return updateString;
     }
 
     @Override
     public String createString () {
-        ArrayList<String> TypeList = new ArrayList<String>(Arrays.asList("String", "String", "String", "Date", "String", "String", "String", "String", "String", "Int"));
-        List<String> TypeNameList = new ArrayList<String>(Arrays.asList("firstName", "middleName", "lastName", "dob", "address", "country", "phoneNumber", "email", "language", "ssn"));
-        return createTableString(TypeList, TypeNameList);
+        ArrayList<SQLCreateType> createList = new ArrayList<SQLCreateType>();
+        createList.add(new SQLCreateType("firstName", "String"));
+        createList.add(new SQLCreateType("middleName", "String"));
+        createList.add(new SQLCreateType("lastName", "String"));
+        createList.add(new SQLCreateType("dob", "Date"));
+        createList.add(new SQLCreateType("address", "String"));
+        createList.add(new SQLCreateType("country", "String"));
+        createList.add(new SQLCreateType("phoneNumber", "String"));
+        createList.add(new SQLCreateType("email", "String"));
+        createList.add(new SQLCreateType("language", "String"));
+        createList.add(new SQLCreateType("ssn", "Int"));
+        return createTableString(createList);
     }
     @Override
     public String valuesString() {

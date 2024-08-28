@@ -1,4 +1,7 @@
-package edu.missouri.csbank.bank.Users;
+package edu.missouri.csbank.bank.users;
+
+import edu.missouri.csbank.bank.account.Account;
+import edu.missouri.csbank.bank.rewards.Rewards;
 
 import java.util.ArrayList;
 import java.util.Date;
