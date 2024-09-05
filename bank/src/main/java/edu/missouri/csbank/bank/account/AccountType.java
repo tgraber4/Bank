@@ -1,7 +1,7 @@
 package edu.missouri.csbank.bank.account;
 
 public enum AccountType {
-    SAVINGS, CHECKING, INVESTMENT, CREDIT;
+    SAVINGS, CHECKINGS, INVESTMENT, CREDIT;
 
     // Savings --> Hold money and has debit card
     // Checking --> hold money, used to pay things, has a debit card

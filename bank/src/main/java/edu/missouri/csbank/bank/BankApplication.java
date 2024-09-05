@@ -1,20 +1,20 @@
 package edu.missouri.csbank.bank;
 
-import edu.missouri.csbank.bank.sql.DBPasswordManager;
-import edu.missouri.csbank.bank.sql.Tables;
-import edu.missouri.csbank.bank.users.*;
+import com.google.gson.Gson;
 import edu.missouri.csbank.bank.account.Account;
 import edu.missouri.csbank.bank.account.AccountInfo;
 import edu.missouri.csbank.bank.account.AccountType;
 import edu.missouri.csbank.bank.bankholder.Bank;
 import edu.missouri.csbank.bank.rewards.Rewards;
+import edu.missouri.csbank.bank.sql.DBPasswordManager;
 import edu.missouri.csbank.bank.sql.SQLConnectionManager;
 import edu.missouri.csbank.bank.sql.SQLObject;
+import edu.missouri.csbank.bank.sql.Tables;
+import edu.missouri.csbank.bank.users.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -31,26 +31,27 @@ public class BankApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BankApplication.class, args);
-//		DBPasswordManager manager = new DBPasswordManager();
-//		SQLConnectionManager connectionManager = new SQLConnectionManager(manager.getPassword());
+		DBPasswordManager manager = new DBPasswordManager();
+		System.out.println(manager.getPassword());
+		SQLConnectionManager connectionManager = new SQLConnectionManager(manager.getPassword());
 
 
 
 
 
 
-//		createTable(connectionManager, new PersonalInfo());
-//
+		createTable(connectionManager, new PersonalInfo());
+
 		PersonalInfo test = new PersonalInfo("Bob", "no", "bob", new Date(100, 3, 20), "street", "U.S.", "217-999-9999", "bob@gmail.com", "English", 100023);
-//
-//
-//		clearTable(connectionManager, Tables.PERSONAL_INFO.getName());
-//
-//		UUID testuuid = UUID.randomUUID();
-//
-//		insert(connectionManager, test, testuuid);
-//		test.setFirstName("John");
-//		update(connectionManager, test, testuuid);
+
+
+		clearTable(connectionManager, Tables.PERSONAL_INFO.getName());
+
+		UUID testuuid = UUID.randomUUID();
+
+		insert(connectionManager, test, testuuid);
+		test.setFirstName("John");
+		update(connectionManager, test, testuuid);
 
 
 
@@ -65,6 +66,9 @@ public class BankApplication {
 		Rewards test3 = Rewards.newRewards(150.45, deals);
 		UserWrapper bobWrapper = UserWrapper.newUserWrapper(test, test2, test3);
 		User bob = User.newUser(bobWrapper);
+		UserAuth auth = new UserAuth("hello", "hello");
+
+		bob.setAuth(auth);
 
 		capitalOne.addUser(bob);
 
@@ -162,8 +166,13 @@ public class BankApplication {
 
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+
+
+
+	@PostMapping("/api/string")
+	@CrossOrigin(origins = "http://localhost:5500")
+	public ResponseEntity<User> postString(@RequestBody String requestBody) {
+		// Process the string input as needed
 		PersonalInfo test = new PersonalInfo("Bob", "no", "bob", new Date(100, 3, 20), "street", "U.S.", "217-999-9999", "bob@gmail.com", "English",100023);
 		Personalization test2 = new Personalization(NotificationLevel.NONE);
 		List<String> deals = new ArrayList<>();
@@ -172,9 +181,10 @@ public class BankApplication {
 		Bank capitalOne = Bank.getInstance();
 		UserWrapper bobWrapper = UserWrapper.newUserWrapper(test, test2, test3);
 		User bob = User.newUser(bobWrapper);
-		return "User Name: " + bob.getWrapper().getInfo().getFirstName() + " " + bob.getWrapper().getInfo().getMiddleName() + " " + bob.getWrapper().getInfo().getLastName();
-		// Without inputs: 127.0.0.1:8080/hello
-		// With inputs : 127.0.0.1:8080/hello?name=BObby%20SMith
+
+		// Return a response
+		return ResponseEntity.ok(bob);
 	}
+
 
 }

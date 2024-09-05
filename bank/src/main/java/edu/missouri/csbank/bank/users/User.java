@@ -5,11 +5,11 @@ import edu.missouri.csbank.bank.account.Account;
 import java.util.UUID;
 
 public class User {
-
-    private String username, password;
     private final UserWrapper wrapper;
 
     private final UUID uuid;
+
+    private UserAuth auth;
 
     // make a flowchart for layout
 
@@ -54,5 +54,13 @@ public class User {
     }
     public boolean removeLinkedBank (String linkedBank) {
         return this.wrapper.removeLinkedBank(linkedBank);
+    }
+
+    public void setAuth(UserAuth auth) {
+        this.auth = auth;
+    }
+
+    public UserAuth getAuth() {
+        return auth;
     }
 }

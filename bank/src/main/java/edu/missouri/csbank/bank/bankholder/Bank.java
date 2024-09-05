@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class Bank {
     private final Map<UUID, User> userMap = new HashMap<>();
+    private final Map<String, UUID> usernameMap = new HashMap<>();
 
     /*
     ---- Future Goals ----
@@ -41,9 +42,16 @@ public class Bank {
     }
 
     public void addUser(User user) {
-        userMap.put(UUID.randomUUID(), user);
+        userMap.put(user.getUUID(), user);
+        usernameMap.put(user.getAuth().getUsername(), user.getUUID());
+    }
+
+    public User getUser(String username) {
+        return this.getUser(usernameMap.get(username));
     }
     public User getUser(UUID id) {
+        if (id == null) return null;
         return userMap.get(id);
     }
+
 }

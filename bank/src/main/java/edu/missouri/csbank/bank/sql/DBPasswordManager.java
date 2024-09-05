@@ -8,7 +8,7 @@ public class DBPasswordManager {
 
     private String password;
     public DBPasswordManager() {
-        password = readPassword(new File("files/db-password"));
+        password = readPassword(new File("bank/files/db-password"));
     }
 
     public String getPassword() {

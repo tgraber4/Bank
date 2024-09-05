@@ -38,6 +38,11 @@ public class AccountInfo {
         this.linkedAccounts = new ArrayList<>();
     }
 
+    //TODO: REMOVE THIS AFTER FULL DETAILS READY
+    public static AccountInfo newAccountInfo(double balance) {
+        return new AccountInfo(balance, 0, 0, 0, 0, "");
+    }
+
     public static AccountInfo newAccountInfo(double balance, int accountLimit, double APR, double cashbackRate, int securityLevel, String card) {
         return new AccountInfo(balance, accountLimit, APR, cashbackRate, securityLevel, card);
     }
