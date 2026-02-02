@@ -1,17 +1,14 @@
 package edu.missouri.csbank.bank.users;
 
 public class UserAuth {
+    private String username;
+    private String password;
 
-    private String username, password;
-
+    public UserAuth() {}
 
     public UserAuth(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public UserAuth() {
-
     }
 
     public String getUsername() {
@@ -29,5 +26,4 @@ public class UserAuth {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

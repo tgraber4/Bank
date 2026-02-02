@@ -1,69 +1,146 @@
 package edu.missouri.csbank.bank.users;
 
-import com.google.gson.Gson;
 import edu.missouri.csbank.bank.account.Account;
 import edu.missouri.csbank.bank.account.AccountInfo;
 import edu.missouri.csbank.bank.account.AccountType;
 import edu.missouri.csbank.bank.account.OpenAccountRequest;
-import edu.missouri.csbank.bank.bankholder.Bank;
+import edu.missouri.csbank.bank.repository.AccountRepository;
+import edu.missouri.csbank.bank.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5500")
 public class UserController {
-    @PostMapping("/login")
-    public ResponseEntity<UserAuthResponse> loginAuth(@RequestBody String loginDetails) {
-        Gson gson = new Gson();
-        UserAuth auth = gson.fromJson(loginDetails, UserAuth.class);
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @PostMapping("/signup")
+    public ResponseEntity<UserAuthResponse> signUp(@RequestBody SignUpRequest request) {
         UserAuthResponse response = new UserAuthResponse();
 
-        if (loginDetails == null) {
-            response.setMessage("Invalid login details.");
+        if (userService.findByUsername(request.getUsername()).isPresent()) {
+            response.setMessage("Username already exists.");
             response.setAuthorized(false);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.badRequest().body(response);
         }
-        User user = Bank.getInstance().getUser(auth.getUsername());
-        if (user == null) {
+
+        PersonalInfo info = new PersonalInfo();
+        info.setFirstName(request.getFirstName());
+        info.setLastName(request.getLastName());
+        info.setEmail(request.getEmail());
+
+        User newUser = new User(request.getUsername(), request.getPassword(), info);
+        userService.saveUser(newUser);
+
+        response.setMessage("User created successfully!");
+        response.setAuthorized(true);
+        response.setResponseUUID(java.util.UUID.fromString(newUser.getId()));
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserAuthResponse> loginAuth(@RequestBody UserAuth auth) {
+        UserAuthResponse response = new UserAuthResponse();
+
+        Optional<User> userOpt = userService.findByUsername(auth.getUsername());
+        
+        if (userOpt.isEmpty()) {
             response.setMessage("User not found.");
             response.setAuthorized(false);
             return ResponseEntity.ok(response);
         }
-        if (!user.getAuth().getPassword().equals(auth.getPassword())) {
+
+        User user = userOpt.get();
+        if (!userService.verifyPassword(user, auth.getPassword())) {
             response.setMessage("Incorrect Password.");
             response.setAuthorized(false);
             return ResponseEntity.ok(response);
         }
+
         response.setMessage("Success!");
-        response.setAuthorized(user.getAuth().getPassword().equals(auth.getPassword()));
-        response.setResponseUUID(user.getUUID());
+        response.setAuthorized(true);
+        response.setResponseUUID(java.util.UUID.fromString(user.getId()));
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/user")
     public ResponseEntity<User> getUser(@RequestBody String uuid) {
-        return ResponseEntity.ok(Bank.getInstance().getUser(UUID.fromString(uuid)));
+        // Remove quotes if the frontend sends a quoted string
+        String cleanUuid = uuid.replace("\"", "").trim();
+        return userService.findById(cleanUuid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/settings/update")
+    public ResponseEntity<Void> updateSettings(@RequestBody java.util.Map<String, Object> payload) {
+        String userId = (String) payload.get("userId");
+        boolean transactionAlerts = (boolean) payload.get("transactionAlerts");
+        boolean billAlerts = (boolean) payload.get("billAlerts");
+
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setTransactionAlertsEnabled(transactionAlerts);
+            user.setBillAlertsEnabled(billAlerts);
+            userService.saveUser(user);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody java.util.Map<String, String> payload) {
+        String userId = payload.get("userId");
+        String oldPassword = payload.get("oldPassword");
+        String newPassword = payload.get("newPassword");
+
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user.getPassword().equals(oldPassword)) {
+                user.setPassword(newPassword);
+                userService.saveUser(user);
+                return ResponseEntity.ok("Password changed successfully.");
+            } else {
+                return ResponseEntity.badRequest().body("Incorrect old password.");
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/openaccount")
-    public ResponseEntity<Account> openAccount(@RequestBody String accountDetails) {
-        Gson gson = new Gson();
-        OpenAccountRequest request = gson.fromJson(accountDetails, OpenAccountRequest.class);
-        AccountInfo info = AccountInfo.newAccountInfo(100.00);
-        Account account = new Account(AccountType.valueOf(request.getAccountType().toUpperCase()), info);
-
-        User user = Bank.getInstance().getUser(UUID.fromString(request.getUUID()));
-        if (user == null) {
-            return ResponseEntity.ok(null);
+    public ResponseEntity<Account> openAccount(@RequestBody OpenAccountRequest request) {
+        Optional<User> userOpt = userService.findById(request.getUUID());
+        
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().build();
         }
 
-        user.getWrapper().addAccount(account);
-        System.out.println(user.getWrapper().getAccountList());
+        User user = userOpt.get();
+        AccountInfo info = AccountInfo.newAccountInfo(100.00);
+        
+        AccountType type;
+        try {
+            type = AccountType.valueOf(request.getAccountType().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        Account account = new Account(type, info);
+        account.setNickname(request.getNickname() != null ? request.getNickname() : type.name());
+        
+        user.addAccount(account);
+        userService.saveUser(user); // Cascades to save the account
+        
         return ResponseEntity.ok(account);
     }
 }

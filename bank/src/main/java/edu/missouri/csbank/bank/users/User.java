@@ -1,66 +1,121 @@
 package edu.missouri.csbank.bank.users;
 
 import edu.missouri.csbank.bank.account.Account;
-
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "app_user")
 public class User {
-    private final UserWrapper wrapper;
 
-    private final UUID uuid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-    private UserAuth auth;
+    private String username;
+    
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private String password;
 
-    // make a flowchart for layout
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "personal_info_id", referencedColumnName = "id")
+    private PersonalInfo personalInfo;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Account> accounts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Alert> alerts = new ArrayList<>();
 
+    private Boolean transactionAlertsEnabled = true;
+    private Boolean billAlertsEnabled = true;
 
-    private User(UUID uuid, UserWrapper wrapper) {
-        this.uuid = uuid;
-        this.wrapper = wrapper;
+    public User() {
+        this.transactionAlertsEnabled = true;
+        this.billAlertsEnabled = true;
     }
 
-    // makes a new user
-    private User(UserWrapper wrapper) {
-        this.uuid = UUID.randomUUID();
-        this.wrapper = wrapper;
+    public User(String username, String password, PersonalInfo personalInfo) {
+        this.username = username;
+        this.password = password;
+        this.personalInfo = personalInfo;
+        this.transactionAlertsEnabled = true;
+        this.billAlertsEnabled = true;
     }
 
-    public static User newUser(UserWrapper wrapper) {
-        return new User(wrapper);
-    }
-    public static User existingUser(UUID uuid, UserWrapper wrapper) {
-        return new User(uuid, wrapper);
+    public String getId() {
+        return id;
     }
 
-    public UserWrapper getWrapper() {
-        return wrapper;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public UUID getUUID() {
-        return uuid;
+    public String getUsername() {
+        return username;
     }
 
-    public void addAccount (Account account) {
-        this.wrapper.addAccount(account);
-    }
-    public void addLinkedBank (String linkedBank) {
-        this.wrapper.addLinkedBank(linkedBank);
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public boolean removeAccount (Account account) {
-        return this.wrapper.removeAccount(account);
-    }
-    public boolean removeLinkedBank (String linkedBank) {
-        return this.wrapper.removeLinkedBank(linkedBank);
+    public String getPassword() {
+        return password;
     }
 
-    public void setAuth(UserAuth auth) {
-        this.auth = auth;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public UserAuth getAuth() {
-        return auth;
+    public Boolean isTransactionAlertsEnabled() {
+        return transactionAlertsEnabled != null && transactionAlertsEnabled;
+    }
+
+    public void setTransactionAlertsEnabled(Boolean transactionAlertsEnabled) {
+        this.transactionAlertsEnabled = transactionAlertsEnabled;
+    }
+
+    public Boolean isBillAlertsEnabled() {
+        return billAlertsEnabled != null && billAlertsEnabled;
+    }
+
+    public void setBillAlertsEnabled(Boolean billAlertsEnabled) {
+        this.billAlertsEnabled = billAlertsEnabled;
+    }
+
+    public PersonalInfo getPersonalInfo() {
+        return personalInfo;
+    }
+
+    public void setPersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public List<Alert> getAlerts() {
+        return alerts;
+    }
+
+    public void setAlerts(List<Alert> alerts) {
+        this.alerts = alerts;
+    }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+        account.setUser(this);
+    }
+
+    public void removeAccount(Account account) {
+        accounts.remove(account);
+        account.setUser(null);
     }
 }
